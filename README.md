@@ -1,4 +1,4 @@
----
+
 
 # CSCI 3200 – Project #2
 
@@ -11,7 +11,6 @@
 * **Due Date:** April 25, 2026 @ 11:59 PM
 * **Project Type:** Group Project
 
----
 
 ## Project Overview
 
