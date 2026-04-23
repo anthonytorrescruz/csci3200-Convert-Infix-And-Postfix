@@ -13,13 +13,14 @@ public class ConvertInfixAndPostfix {
 
     //	converts infix to post fix
     public String convertToPostfix() {
-//		defines variables that compare precedences
+//		defines variables that compare precedence and tracks index of characters in expression
         int expCharPrecedence = -2;
         int peekPrecedence = -1;
+        int charCount = 0;
 //		initializes post fix expression
         String postFix = "";
 //		defines arrays that use indices to compare character precedences
-        String[] expressionArr = expression.split("");
+        String[] expressionArr = expression.split(" ");
         String[] precedenceArr = {"+-", "*/", "^"};
 //		defines the stack to convert infix to post fix
         Stack<String> stack = new Stack<String>();
@@ -28,38 +29,70 @@ public class ConvertInfixAndPostfix {
         for(String character : expressionArr) {
 //			pops operators from stack to post fix expression between open and closed parenthesis
             if(character.matches("()")) {
-                // find out what you need to do for this
                 // open parenthesis are pushed directly to stack and closed parenthesis pop operators to postFix expression
+            	if(character.matches("(")) {
+            		stack.push(character);
+            		System.out.println("stack peek: " + stack.peek());
+            	}
+            	else
+//            		if(stack.peek() == "(")
+//            			// remove open parentheses
+//            			stack.pop();
+        			// pop operators up until closed parentheses
+        			while(stack.peek() != "(")
+        				postFix += stack.pop();
+            			System.out.println("stack to postfix: " + postFix);
+        			// pop open parenthesis
+        			stack.pop();
             }
 //			pushes operator to stack if operator is not equal or higher precedence than the top of the stack; otherwise, pushes operator to stack
-            else if(character.matches("+-*/^")) {
-//				finds the precedences of current and top of the stack operator
-                for(int pre=0; pre<precedenceArr.length; pre++) {
-//					finds the precedence of the current operator in the infix expression
-                    if(character.matches(precedenceArr[pre]))
-                        expCharPrecedence = pre;
-//					finds the precedence of the operator at the top of the stack
-                    if(stack.peek().matches(precedenceArr[pre]))
-                        peekPrecedence = pre;
-                }
-
-//				pops operators to post fix expression
-                if(expCharPrecedence >= peekPrecedence) {
-//					redefines precedence variables to be unequal
-                    expCharPrecedence = -2;
-                    peekPrecedence = -1;
-//					pops entire stack to post fix expression
-                    while(!stack.empty())
-                        postFix += stack.pop();
-                }
-//				pushes operator to stack
-                else
-                    stack.push(character);
+            else if("+-*/^".contains(character)) {
+            	if(stack.empty()) {
+            		stack.push(character);
+            		System.out.println("stack peek: " + stack.peek());
+            	} else {
+	//				finds the precedences of current and top of the stack operator
+	                for(int pre=0; pre<precedenceArr.length; pre++) {
+	//					finds the precedence of the current operator in the infix expression
+	                    if(precedenceArr[pre].contains(character)) {
+	                    	//character.matches(precedenceArr[pre])
+	                        expCharPrecedence = pre;
+	                    }
+	//					finds the precedence of the operator at the top of the stack
+	                    if(precedenceArr[pre].contains(stack.peek())) {
+	                    	//stack.peek().matches(precedenceArr[pre])
+	                        peekPrecedence = pre;
+	                    }
+	                }
+	
+	//				pops operators to post fix expression
+	                if(expCharPrecedence <= peekPrecedence) {
+	//					redefines precedence variables to be unequal
+	                    expCharPrecedence = -2;
+	                    peekPrecedence = -1;
+	//					pops entire stack to post fix expression
+	                    while(!stack.empty()) {
+	                    	
+	                        postFix += stack.pop();
+	                        System.out.println("stack to postfix: " + postFix);
+	                    }
+	                    stack.push(character);
+	                }
+	//				pushes operator to stack
+	                else
+	                    stack.push(character);
+	                	System.out.println("stack peek: " + character);
+            	}
             }
 //			sends numbers to post fix expression
-            else
+            else {
                 postFix += character;
+                System.out.println("number to postfix: " + postFix);
+            }
         }
+        while(!stack.empty())
+            postFix += stack.pop();
+        	System.out.println("stack to postfix: " + postFix);
 
         return postFix;
     }
