@@ -68,11 +68,11 @@ public class ConvertInfixAndPostfix {
 
         Stack<String> stack = new Stack<String>();  //creates a stack to store strings
 
-        String[] expressionArr = expression.split(" "); //split string by spaces
+        String[] expressionArr = expression.split(" "); //use Regular Expression to split string by spaces
 
         for (String token : expressionArr) {    //moves through each token in the expression
 
-            if (token.matches("[0-9]+")) {  //if a token is an integer of any size, push it to the top of the stack
+            if (token.matches("[0-9]")) {  //use Regular Expression to push int tokens to the top of the stack
                 stack.push(token);
             }
 
