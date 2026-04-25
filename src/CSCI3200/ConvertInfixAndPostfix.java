@@ -43,7 +43,7 @@ public class ConvertInfixAndPostfix {
             }
             // If there is an operator, it is place into the stack if nothing is in there and if the operator is greater than the
             // operator in the top of the stack, it is added
-            else if("+-*/^".contains(character)) {
+            else if("+-*/^%".contains(character)) {
             	// If the stack is empty, add push operator to it
             	if(stack.empty()) {
             		stack.push(character);
@@ -64,7 +64,7 @@ public class ConvertInfixAndPostfix {
     	                if(expCharPrecedence <= peekPrecedence) {
     	                    expCharPrecedence = -2;
     	                    peekPrecedence = -1;
-							// Pop everything from the stack to the post fix expression until it reaches a parenthesis or bottom of stack
+    	                    // Pop everything from the stack to the post fix expression until it reaches a parenthesis or bottom of stack
     	                    while(!stack.empty() && !stack.peek().equals("(")) {
     	                    	
     	                        postFix += stack.pop();
