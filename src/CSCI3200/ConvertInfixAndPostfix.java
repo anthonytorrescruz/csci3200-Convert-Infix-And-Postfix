@@ -89,7 +89,7 @@ public class ConvertInfixAndPostfix {
             postFix += stack.pop();
         }
 
-        return postFix;
+        return String.join(" ", postFix.split(""));
     }
 
     public String convertToInfix() {    //method converts postfix to infix
