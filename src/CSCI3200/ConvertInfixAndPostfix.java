@@ -10,89 +10,84 @@ public class ConvertInfixAndPostfix {
     public ConvertInfixAndPostfix(String infixOrPostfix) {
         expression = infixOrPostfix;
     }
-
+    
     //	converts infix to post fix
     public String convertToPostfix() {
-//		defines variables that compare precedence and tracks index of characters in expression
+    	// variables to compare future operator precedences
         int expCharPrecedence = -2;
         int peekPrecedence = -1;
-        int charCount = 0;
-//		initializes post fix expression
+        // post fix expression
         String postFix = "";
-//		defines arrays that use indices to compare character precedences
+        // splits operators and defines operator precedence through index
         String[] expressionArr = expression.split(" ");
         String[] precedenceArr = {"+-", "*/", "^"};
-//		defines the stack to convert infix to post fix
+        // defines operator and parenthesis stack
         Stack<String> stack = new Stack<String>();
-
-//		checks if character is operator or number and sends each to the post fix expression in order
+        
+        // Cycles through each character in the string array; adds numbers, operators, and parentheses correctly
         for(String character : expressionArr) {
-//			pops operators from stack to post fix expression between open and closed parenthesis
-            if(character.matches("()")) {
+        	// If a character is a parenthesis, an open parenthesis is added to the stack or operators are added
+        	// to post fix expression if they are on top of an open parenthesis
+            if("()".contains(character)) {
                 // open parenthesis are pushed directly to stack and closed parenthesis pop operators to postFix expression
-            	if(character.matches("(")) {
+            	if("(".contains(character)) {
             		stack.push(character);
-            		System.out.println("stack peek: " + stack.peek());
             	}
-            	else
-//            		if(stack.peek() == "(")
-//            			// remove open parentheses
-//            			stack.pop();
-        			// pop operators up until closed parentheses
-        			while(stack.peek() != "(")
+            	else {
+            		// the stack is popped into post fix until it reaches the bottom or an open parenthesis and removes it
+        			while(!stack.empty() && !stack.peek().equals("(")) {
         				postFix += stack.pop();
-            			System.out.println("stack to postfix: " + postFix);
-        			// pop open parenthesis
+        			}
         			stack.pop();
+            	}
             }
-//			pushes operator to stack if operator is not equal or higher precedence than the top of the stack; otherwise, pushes operator to stack
+            // If there is an operator, it is place into the stack if nothing is in there and if the operator is greater than the
+            // operator in the top of the stack, it is added
             else if("+-*/^".contains(character)) {
+            	// If the stack is empty, add push operator to it
             	if(stack.empty()) {
             		stack.push(character);
-            		System.out.println("stack peek: " + stack.peek());
             	} else {
-	//				finds the precedences of current and top of the stack operator
-	                for(int pre=0; pre<precedenceArr.length; pre++) {
-	//					finds the precedence of the current operator in the infix expression
-	                    if(precedenceArr[pre].contains(character)) {
-	                    	//character.matches(precedenceArr[pre])
-	                        expCharPrecedence = pre;
-	                    }
-	//					finds the precedence of the operator at the top of the stack
-	                    if(precedenceArr[pre].contains(stack.peek())) {
-	                    	//stack.peek().matches(precedenceArr[pre])
-	                        peekPrecedence = pre;
-	                    }
-	                }
-	
-	//				pops operators to post fix expression
-	                if(expCharPrecedence <= peekPrecedence) {
-	//					redefines precedence variables to be unequal
-	                    expCharPrecedence = -2;
-	                    peekPrecedence = -1;
-	//					pops entire stack to post fix expression
-	                    while(!stack.empty()) {
-	                    	
-	                        postFix += stack.pop();
-	                        System.out.println("stack to postfix: " + postFix);
-	                    }
-	                    stack.push(character);
-	                }
-	//				pushes operator to stack
-	                else
-	                    stack.push(character);
-	                	System.out.println("stack peek: " + character);
+            		// If stack does not have an open parenthesis, compare the operator to the top operator
+            		if(!stack.peek().equals("(")) {
+            			// finds both operator's precedences via array index
+    	                for(int pre=0; pre<precedenceArr.length; pre++) {
+    	                    if(precedenceArr[pre].contains(character)) {
+    	                        expCharPrecedence = pre;
+    	                    }
+    	                    if(precedenceArr[pre].contains(stack.peek())) {
+    	                        peekPrecedence = pre;
+    	                    }
+    	                }
+    	                // If operator precedence is less than or equal to the operator at the top of the stack,
+    	                // then pop everything until it reaches the bottom or open parenthesis, then push operator
+    	                if(expCharPrecedence <= peekPrecedence) {
+    	                    expCharPrecedence = -2;
+    	                    peekPrecedence = -1;
+							// Pop everything from the stack to the post fix expression until it reaches a parenthesis or bottom of stack
+    	                    while(!stack.empty() && !stack.peek().equals("(")) {
+    	                    	
+    	                        postFix += stack.pop();
+    	                    }
+    	                    stack.push(character);
+    	                }
+    	                else {
+    	                    stack.push(character);
+    	                }
+            		}
+            		else {
+                		stack.push(character);
+                	}
             	}
             }
-//			sends numbers to post fix expression
             else {
                 postFix += character;
-                System.out.println("number to postfix: " + postFix);
             }
         }
-        while(!stack.empty())
+        // Adds remaining operators to post fix expression
+        while(!stack.empty()) {
             postFix += stack.pop();
-        	System.out.println("stack to postfix: " + postFix);
+        }
 
         return postFix;
     }
@@ -101,11 +96,11 @@ public class ConvertInfixAndPostfix {
 
         Stack<String> stack = new Stack<String>();  //creates a stack to store strings
 
-        String[] expressionArr = expression.split(" "); //use Regular Expression to split string by spaces
+        String[] expressionArr = expression.split(" "); //split string by spaces
 
         for (String token : expressionArr) {    //moves through each token in the expression
 
-            if (token.matches("[0-9]")) {  //use Regular Expression to push int tokens to the top of the stack
+            if (token.matches("[0-9]+")) {  //if a token is an integer of any size, push it to the top of the stack
                 stack.push(token);
             }
 
