@@ -20,7 +20,7 @@ public class ConvertInfixAndPostfix {
         String postFix = "";
         // splits operators and defines operator precedence through index
         String[] expressionArr = expression.split(" ");
-        String[] precedenceArr = {"+-", "*/", "^"};
+        String[] precedenceArr = {"+-", "*/%"};
         // defines operator and parenthesis stack
         Stack<String> stack = new Stack<String>();
         
